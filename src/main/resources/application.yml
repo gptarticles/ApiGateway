@@ -1,0 +1,44 @@
+# Settings of microservices for the gateway
+microservices:
+  auth:
+    url: http://localhost:8081
+  article:
+    url: http://localhost:8082
+
+# Settings for custom OAuth2 authentication process
+custom-oauth2:
+  # URL to remote GET endpoint that checks if the token is valid
+  # Example:
+  # http://auth.example.com/auth/verifyToken?accessToken=ey...
+  validation-url: ${microservices.auth.url}/auth/verifyToken
+  # All claims from JWT tokens passes as query params with this prefix
+  # Example:
+  # sub: 1 -> tokenPayload.sub=1
+  # name: "jack" -> tokenPayload.name=jack
+  claims-query-prefix: "tokenPayload."
+
+spring:
+  application:
+    name: ApiGateway
+  cloud:
+    gateway:
+      routes:
+        - id: auth_routes
+          uri: ${microservices.auth.url}/auth
+          predicates:
+            - Path=/auth/**
+
+        - id: protected_profile_route
+          uri: ${microservices.auth.url}/protected/profile
+          predicates:
+            - Path=/protected/profile/**
+
+        - id: articles_route
+          uri: ${microservices.article.url}/articles
+          predicates:
+            - Path=/articles/**
+
+        - id: protected_articles_route
+          uri: ${microservices.article.url}/protected/articles
+          predicates:
+            - Path=/protected/articles/**
