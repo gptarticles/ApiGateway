@@ -1,0 +1,27 @@
+# Setup for deployment
+#
+# Required env variables:
+# MICROSERVICES_NETWORK_NAME - name of internal network of all microservices
+# DOCKER_REGISTRY - URL of docker registry
+# AUTH_SERVICE_HOST - URL of auth service
+# ARTICLE_SERVICE_HOST - URL of article service
+
+services:
+  api-gateway:
+    image: ${DOCKER_REGISTRY}/gpt-articles/api-gateway:latest
+    container_name: gpt-articles-api-gateway
+    labels:
+      - "com.centurylinklabs.watchtower.enable=true"
+    environment:
+      AUTH_SERVICE_HOST: ${AUTH_SERVICE_HOST}
+      ARTICLE_SERVICE_HOST: ${ARTICLE_SERVICE_HOST}
+    restart: unless-stopped
+    networks:
+      - all-services-network
+
+networks:
+  # Internal network of all microservices
+  all-services-network:
+    name: ${MICROSERVICES_NETWORK_NAME}
+    driver: bridge
+    internal: true
