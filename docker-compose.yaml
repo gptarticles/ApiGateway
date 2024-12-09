@@ -5,6 +5,7 @@
 # DOCKER_REGISTRY - URL of docker registry
 # AUTH_SERVICE_HOST - URL of auth service
 # ARTICLE_SERVICE_HOST - URL of article service
+# MODERATION_SERVICE_HOST - URL of moderation service
 
 services:
   api-gateway:
@@ -15,6 +16,7 @@ services:
     environment:
       AUTH_SERVICE_HOST: ${AUTH_SERVICE_HOST}
       ARTICLE_SERVICE_HOST: ${ARTICLE_SERVICE_HOST}
+      MODERATION_SERVICE_HOST: ${MODERATION_SERVICE_HOST}
     restart: unless-stopped
     networks:
       - all-services-network

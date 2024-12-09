@@ -4,6 +4,8 @@ microservices:
     url: http://${AUTH_SERVICE_HOST}
   article:
     url: http://${ARTICLE_SERVICE_HOST}
+  moderation:
+    url: http://${MODERATION_SERVICE_HOST}
 
 # Settings for custom OAuth2 authentication process
 custom-oauth2:
@@ -42,3 +44,8 @@ spring:
           uri: ${microservices.article.url}/protected/articles
           predicates:
             - Path=/protected/articles/**
+
+        - id: protected_moderation_route
+          uri: ${microservices.moderation.url}/protected/moderation
+          predicates:
+            - Path= /protected/moderation/**
